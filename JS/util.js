@@ -15,12 +15,12 @@ class Queue {
     }
 
     pop() {
-        if (!this.isEmpty()) {
+        if (!this.is_empty()) {
             return this.queue.shift();
         }
     }
 
-    isEmpty() {
+    is_empty() {
         return this.queue.length === 0;
     }
 
@@ -39,12 +39,12 @@ class Stack {
     }
 
     pop() {
-        if (!this.isEmpty()) {
+        if (!this.is_empty()) {
             return this.stack.pop();
         }
     }
 
-    isEmpty() {
+    is_empty() {
         return this.stack.length === 0;
     }
 
@@ -72,50 +72,50 @@ class PriorityQueue {
         }
         fval = this.cache[item_key];
         this.heap.push(item);
-        let currentIndex = this.heap.length - 1;
-        let parentIndex;
-        while ((parentIndex = Math.floor((currentIndex-1)/2)) >= 0) {
-            const parent = this.heap[parentIndex];
+        let current_index = this.heap.length - 1;
+        let parent_index;
+        while ((parent_index = Math.floor((current_index-1)/2)) >= 0) {
+            const parent = this.heap[parent_index];
             if (fval < this.cache[this.get_key(parent)]) {
-                this.heap[parentIndex] = this.heap[currentIndex];
-                this.heap[currentIndex] = parent;
+                this.heap[parent_index] = this.heap[current_index];
+                this.heap[current_index] = parent;
             } else {
                 break;
             }
-            currentIndex = parentIndex;
+            current_index = parent_index;
         }
     }
 
     pop() {
-        if (!(this.isEmpty())) {
-            const rootpos = 0; 
-            const popped = this.heap[rootpos];
-            this.heap[rootpos] = this.heap.slice(-1)[0]; 
+        if (!(this.is_empty())) {
+            const root_pos = 0; 
+            const popped = this.heap[root_pos];
+            this.heap[root_pos] = this.heap.slice(-1)[0]; 
             this.heap.pop();
 
-            const finalIndex = this.heap.length-1;
+            const final_index = this.heap.length-1;
 
-            let parentpos = rootpos;
-            let leftchildpos = 1, rightchildpos = 2;
-            while (leftchildpos <= finalIndex) {
-                let smallerChildPos;
-                if (rightchildpos <= finalIndex) {
-                    smallerChildPos = (this.cache[this.get_key(this.heap[leftchildpos])] < this.cache[this.get_key(this.heap[rightchildpos])]) ? leftchildpos : rightchildpos;
+            let parent_pos = root_pos;
+            let left_child_pos = 1, right_child_pos = 2;
+            while (left_child_pos <= final_index) {
+                let smaller_child_pos;
+                if (right_child_pos <= final_index) {
+                    smaller_child_pos = (this.cache[this.get_key(this.heap[left_child_pos])] < this.cache[this.get_key(this.heap[right_child_pos])]) ? left_child_pos : right_child_pos;
                 } else  {
-                    smallerChildPos = leftchildpos;
+                    smaller_child_pos = left_child_pos;
                 }
 
-                if (this.cache[this.get_key(this.heap[parentpos])] < this.cache[this.get_key(this.heap[smallerChildPos])]) {
+                if (this.cache[this.get_key(this.heap[parent_pos])] < this.cache[this.get_key(this.heap[smaller_child_pos])]) {
                     break;
                 } else {
-                    let tmp = this.heap[parentpos];
-                    this.heap[parentpos] = this.heap[smallerChildPos];
-                    this.heap[smallerChildPos] = tmp;
+                    let tmp = this.heap[parent_pos];
+                    this.heap[parent_pos] = this.heap[smaller_child_pos];
+                    this.heap[smaller_child_pos] = tmp;
                 }
 
-                parentpos = smallerChildPos;
-                leftchildpos = 2*parentpos+1;
-                rightchildpos = 2*parentpos+2;
+                parent_pos = smaller_child_pos;
+                left_child_pos = 2*parent_pos+1;
+                right_child_pos = 2*parent_pos+2;
             }
 
             return popped
@@ -125,7 +125,7 @@ class PriorityQueue {
         }
     }
 
-    isEmpty() {
+    is_empty() {
         return this.heap.length === 0;
     }
 
@@ -134,7 +134,7 @@ class PriorityQueue {
     }
 }
 
-
+/* TESTS
 let test_queue = function() {
     let q1 = new Queue([1,2,3,4,5]);
     q1.push(6);
@@ -142,7 +142,7 @@ let test_queue = function() {
     q1.pop();
     q1.pop();
     q1.view();
-    console.log(q1.isEmpty());
+    console.log(q1.is_empty());
 
     let q2 = new Queue();
     q2.pop();
@@ -161,7 +161,7 @@ let test_stack = function() {
     s1.pop();
     s1.pop();
     s1.view();
-    console.log(s1.isEmpty());
+    console.log(s1.is_empty());
 
     let s2 = new Stack();
     s2.pop();
@@ -195,4 +195,4 @@ if (require.main === module) {
     test_stack();
     test_pq();
 }
-
+*/

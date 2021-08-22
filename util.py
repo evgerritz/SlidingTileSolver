@@ -35,8 +35,7 @@ class PriorityQueue():
             self.push(item)
 
     def _get_state(self, item):
-        return item
-        #return tuple(map(tuple, item.board.state))
+        return tuple(map(tuple, item.board.state))
 
     def push(self, item):
         state = self._get_state(item)
