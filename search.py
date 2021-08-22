@@ -1,6 +1,4 @@
 import util 
-import numpy as np
-import game
 
 class Node:
     def __init__(self, board, tileMoved, parent):
@@ -57,7 +55,6 @@ def astar(board, heuristic):
         return heuristic(node) + node.cost
     empty_frontier = util.PriorityQueue(eval_func)
     return search(board, empty_frontier)
-
 
 def wrong_heuristic(node):
     state = node.board.state

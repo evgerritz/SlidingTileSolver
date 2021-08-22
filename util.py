@@ -35,7 +35,8 @@ class PriorityQueue():
             self.push(item)
 
     def _get_state(self, item):
-        return tuple(map(tuple, item.board.state))
+        return item
+        #return tuple(map(tuple, item.board.state))
 
     def push(self, item):
         state = self._get_state(item)
@@ -82,5 +83,18 @@ class PriorityQueue():
         else:
             return None
 
+    def view(self):
+        print(self.heap)
+
     def isEmpty(self):
         return len(self.heap) == 0
+
+if __name__ == '__main__':
+    pq1 = PriorityQueue(function = lambda x:x)
+    for i in range(5,0,-1):
+        pq1.push(i)
+        pq1.view()
+
+    for i in range(5,0,-1):
+        pq1.pop()
+        pq1.view()
