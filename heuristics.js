@@ -13,8 +13,12 @@ function num_wrong_heuristic(node) {
     [num_rows, num_cols] = state.size();
     for (let i = 0; i < num_rows; i++) {
        for (let j = 0; j < num_cols; j++) {
-           if (state.get([i, j]) != null && state.get([i, j]) !== i*num_cols + j + 1)
+           const entry = state.get([i,j]);
+           const numeric_in_wrong_spot = (entry != null && entry !== i*num_cols + j + 1);
+           const empty_in_wrong_spot = (entry == null && !(i === num_rows-1 && j === num_cols-1));
+           if (numeric_in_wrong_spot || empty_in_wrong_spot) {
                num_wrong++;
+           }
        } 
     }
     return num_wrong;
@@ -29,11 +33,15 @@ function manhattan_dist_heuristic(node) {
     for (let i = 0; i < num_rows; i++) {
        for (let j = 0; j < num_cols; j++) {
            const entry = state.get([i, j]);
+           let correct_j, correct_i;
            if (entry != null) {
-               correct_j = (entry-1) % num_cols;
                correct_i = Math.floor((entry-1) / num_cols);
-               distances.push(Math.abs(i-correct_i) + Math.abs(j-correct_j));
+               correct_j = (entry-1) % num_cols;
+           } else {
+                correct_i = num_rows-1;
+                correct_j = num_cols-1;
            }
+           distances.push(Math.abs(i-correct_i) + Math.abs(j-correct_j));
        } 
     }
     return distances.reduce((x,y) => x+y);

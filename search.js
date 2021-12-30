@@ -11,7 +11,7 @@
 class Node {
     constructor (state, action, parent_node) {
         this.state = state;
-        this.cost = (parent_node) ? parent_node.cost + 1 : 1;
+        this.cost = (parent_node) ? parent_node.cost + 1 : 0;
         this.action = action;
         this.parent_node = parent_node
     }
@@ -40,17 +40,14 @@ function generic_search(state, empty_frontier, view=false) {
         num_expanded += 1;
         new_state = node.state;
 
-        if (view) {
-            setTimeout(new_state.display, 500);
-        }
-
         if (new_state.is_solved()) {
             console.log(num_expanded);
             return get_actions_to(node);
         }
 
-        if (!(visited.has(new_state.state))) {
-            visited.add(new_state.state);
+        let string_key = String(new_state.state);
+        if (!(visited.has(string_key))) {
+            visited.add(string_key);
             for (let possible_action of new_state.get_valid_actions()) {
                 let resulting_state = new_state.copy();
                 resulting_state.make_action(possible_action);

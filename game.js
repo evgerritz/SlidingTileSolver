@@ -20,16 +20,14 @@ class Board {
         this.solved_board = board_values;
         if (start == null || !(this.is_valid_state(start))) {
             this.state = this.solved_board.clone();
-            this.shuffle_board();
         } else {
             this.state = math.matrix(start);
         }
     }
 
     shuffle_board() {
-        /* Monte Carlo Board Shuffling */
-        const prob_of_term = 0.3 ** this.board_size;
-        while (Math.random() > prob_of_term) {
+        let n_cubed = this.board_size**3
+        for (let i = 0; i < n_cubed; i++) {
             const valid_moves = this.get_valid_actions();
             const rand_idx = Math.floor(Math.random() * valid_moves.length);
             const move = valid_moves[rand_idx];
@@ -145,38 +143,60 @@ class Board {
         return flattened;
     }
 
-    display() {
-        let is_first_draw = (document.getElementsByTagName("td").length == 0);
+    display(state=null) {
+        if (state === null) {
+            state=this.state;
+        }
+        
+        let is_first_draw = (document.getElementsByTagName("td").length !== this.board_size**2);
         let table_ref = document.getElementsByTagName('tbody')[0];
         if (is_first_draw) {
+            while (table_ref.firstChild) {
+                table_ref.removeChild(table_ref.firstChild);
+            }
             let num_rows, num_cols, new_row;
-            [num_rows, num_cols] = this.state.size();
+            [num_rows, num_cols] = state.size();
             for (let i = 0; i < num_rows; i++) {
                 new_row = table_ref.insertRow(table_ref.rows.length);
                 let new_cell;
                 for (let j = 0; j < num_cols; j++) {
                     new_cell  = new_row.insertCell(new_row.cells.length);
-                    new_cell.setAttribute('style', 'border: 1px solid black; text-align: right');
+                    new_cell.setAttribute('style', 'border: 1px solid black; text-align: center');
                 }
             }
         }
         let tds = document.getElementsByTagName("td");
         let num_rows, num_cols;
-        [num_rows, num_cols] = this.state.size();
+        [num_rows, num_cols] = state.size();
         for (let i = 0; i < num_rows; i++) {
             for (let j = 0; j < num_cols; j++) {
-                let entry = this.state.get([i, j]);
+                let entry = state.get([i, j]);
                 if (entry != null) {
                     tds[i*num_rows+j].innerHTML = entry.toString();         
+                    tds[i*num_rows+j].setAttribute('onclick', 'board.make_action('+entry.toString()+'); board.display()');
+                } else {
+                    tds[i*num_rows+j].innerHTML = ' ';
                 } 
             }
         }
     }
 }
 
-let size = 3;
-let board = new Board(size);
-board.display();
+function create_new_board () {
+    let size = parseInt(document.getElementById('size').value);
+    let board = new Board(size);
+    board.display()
+    return board;
+}
 
-const solution = astar_manhattan(board, false);
-document.getElementById("solution").innerText = solution.toString();
+function solve_board (board) {
+    let method_name = document.getElementById('search_method').value;
+    let solver = new Function('return ' + method_name + '(board);')
+    let solution = solver();
+    document.getElementById("solution").innerText = solution.toString();
+    return solution;
+}
+
+let board = create_new_board();
+let solution;
+
