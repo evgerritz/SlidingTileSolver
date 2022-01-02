@@ -55,7 +55,7 @@ class Stack {
 
 class PriorityQueue {
     constructor(priority_func = x => x, get_val_for_index_func = x => x, items = []) {
-        this.cache = {};
+        this.cache = new Map(); 
         this.heap = [];
         this.f = priority_func;
         this.get_key = get_val_for_index_func;
@@ -67,16 +67,16 @@ class PriorityQueue {
     push(item) {
         let item_key = this.get_key(item);
         let fval;
-        if (!(item_key in this.cache)) {
-            this.cache[item_key] = this.f(item);
+        if (!(this.cache.has(item_key))) {
+            this.cache.set(item_key, this.f(item));
         }
-        fval = this.cache[item_key];
+        fval = this.cache.get(item_key);
         this.heap.push(item);
         let current_index = this.heap.length - 1;
         let parent_index;
         while ((parent_index = Math.floor((current_index-1)/2)) >= 0) {
             const parent = this.heap[parent_index];
-            if (fval < this.cache[this.get_key(parent)]) {
+            if (fval < this.cache.get(this.get_key(parent))) {
                 this.heap[parent_index] = this.heap[current_index];
                 this.heap[current_index] = parent;
             } else {
@@ -100,12 +100,12 @@ class PriorityQueue {
             while (left_child_pos <= final_index) {
                 let smaller_child_pos;
                 if (right_child_pos <= final_index) {
-                    smaller_child_pos = (this.cache[this.get_key(this.heap[left_child_pos])] < this.cache[this.get_key(this.heap[right_child_pos])]) ? left_child_pos : right_child_pos;
+                    smaller_child_pos = (this.cache.get(this.get_key(this.heap[left_child_pos])) < this.cache.get(this.get_key(this.heap[right_child_pos]))) ? left_child_pos : right_child_pos;
                 } else  {
                     smaller_child_pos = left_child_pos;
                 }
 
-                if (this.cache[this.get_key(this.heap[parent_pos])] < this.cache[this.get_key(this.heap[smaller_child_pos])]) {
+                if (this.cache.get(this.get_key(this.heap[parent_pos])) < this.cache.get(this.get_key(this.heap[smaller_child_pos]))) {
                     break;
                 } else {
                     let tmp = this.heap[parent_pos];
