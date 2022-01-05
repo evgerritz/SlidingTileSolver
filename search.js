@@ -35,7 +35,7 @@ async function generic_search(state, empty_frontier, view=false) {
     let visited = new Set();
     let new_state = state.copy();
 
-    let max_nodes = 100000;
+    let max_nodes = 1000000;
     let num_expanded = 0; //for statistics
     
     //let interval_id = setInterval(check_for_events, 1);
@@ -43,7 +43,9 @@ async function generic_search(state, empty_frontier, view=false) {
     let initial_node = new Node(new_state, null, null);
     frontier.push(initial_node);
     while (!(frontier.is_empty()) && num_expanded < max_nodes && cancelled === false) {
-        await new Promise(r => setTimeout(r, 0));
+        if (num_expanded % 1000 == 0) { //only refreshUI every 1000 nodes expanded
+            await new Promise(r => setTimeout(r, 0));
+        }
         let node = frontier.pop();
         num_expanded += 1;
         new_state = node.state;
