@@ -89,12 +89,20 @@ class Board {
 
     get_neighbors_of_tile(tile) {
         const tile_location = this.get_tile_location(tile);
-        const direction_offsets = [[0,1], [0,-1], [1,0], [-1,0]];
+        const UP = [1,0];
+        const DOWN = [-1,0];
+        const LEFT = [0,-1];
+        const RIGHT = [0,1];
+        const direction_offsets = [UP, DOWN, LEFT, RIGHT];
         let neighbors = [];
         for (let direction_offset of direction_offsets) {
             const neighbor = [tile_location[0] + direction_offset[0],tile_location[1] + direction_offset[1]];
             if (this.is_valid_location(neighbor)) {
                 neighbors.push(neighbor);
+            } else {
+                //this will become null, ensures 0th neighbor always UP, etc.
+                //this will be used to support arrow-key interaction
+                neighbors.push(tile_location);
             }
         }
         return neighbors.map(loc => this.get_tile_from_location(loc));
@@ -106,7 +114,7 @@ class Board {
     }
 
     get_valid_actions() {
-        return this.get_neighbors_of_tile(null);
+        return this.get_neighbors_of_tile(null).filter(x => x != null);
     }
 
     swap_tiles(tile1, tile2) {
@@ -174,10 +182,12 @@ class Board {
             for (let j = 0; j < num_cols; j++) {
                 let entry = state.get([i, j]);
                 if (entry !== null) {
-                    tds[i*num_rows+j].innerHTML = '<div class="tile"> <div class="tile_text">' + entry.toString() + '</div></div>';         
+                    tds[i*num_rows+j].id = '';
+                    tds[i*num_rows+j].innerHTML = '<div class="tile_text">' + entry.toString() + '</div>';         
                     tds[i*num_rows+j].setAttribute('onclick', 'board.make_action('+entry.toString()+'); board.display()');
                 } else {
-                    tds[i*num_rows+j].innerHTML = ' ';
+                    tds[i*num_rows+j].id = 'empty_tile';
+                    tds[i*num_rows+j].innerHTML = '';//'<div id="empty_tile"></div>';
                 } 
             }
         }

@@ -8,47 +8,61 @@
         <link rel="stylesheet" href="main.css">
     </head>
     <body>
-        <center>
-        <form>
-          <button type="button" id="new_board">Create Board</button>
-          <label for="size">of size:</label>
-          <select name="size" id="size">
-            <option value="2">2</option>
-            <option value="3" selected>3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-        </form>
-        <br>
-        <button type="button" id="scramble">Scramble</button>
-        </center>
-        <br>
+        <div class="header">
+            <div class="container">
+                <div class="jumbotron">
+                    <h1>Sliding Tile Puzzle Solver</h1>
+                    <p>Interactive demo of various search algorithms.</p>
+                </div>
+            </div>
+        </div>
 
-        <center>
-            <table id="display_table">
-                <tbody>
-                </tbody>
-            </table>
-        </center>
-        <br>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8">
+                    <center>
+                        <table id="display_table">
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </center>
+                </div>
 
-        <center>
-        <form>
-          <button type="button" id="solve">Solve</button>
-          <label for="search_method">using: </label>
-          <select name="search_method" id="search_method">
-            <option value="bfs">Bredth-First Search</option>
-            <option value="dfs">Depth-First Search</option>
-            <option value="greedy_wrong">Greedy BFS with # Wrong Heuristic</option>
-            <option value="greedy_manhattan">Greedy BFS with Manhattan Heuristic</option>
-            <option value="astar_wrong">A* with # Wrong Heuristic</option>
-            <option value="astar_manhattan" selected>A* with Manhattan Heuristic</option>
-          </select>
-          <button type="button" id="cancel">Cancel</button>
-        </form>
+                <div class="col-sm-4">
+                    <form>
+                      <button type="button" id="new_board">Create Board</button>
+                      <label for="size">of size:</label>
+                      <select name="size" id="size">
+                        <option value="2">2</option>
+                        <option value="3" selected>3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                    </form>
+                    <br>
+                    <button type="button" id="scramble">Scramble</button>
+                    <br>
 
-        <p id="solution"></p>
-        <br>
+
+                    <center>
+                    <form>
+                      <button type="button" id="solve">Solve</button>
+                      <label for="search_method">using: </label>
+                      <select name="search_method" id="search_method">
+                        <option value="bfs">Bredth-First Search</option>
+                        <option value="dfs">Depth-First Search</option>
+                        <option value="greedy_wrong">Greedy BFS with # Wrong Heuristic</option>
+                        <option value="greedy_manhattan">Greedy BFS with Manhattan Heuristic</option>
+                        <option value="astar_wrong">A* with # Wrong Heuristic</option>
+                        <option value="astar_manhattan" selected>A* with Manhattan Heuristic</option>
+                      </select>
+                      <button type="button" id="cancel">Cancel</button>
+                    </form>
+
+                    <p id="solution"></p>
+                </div>
+            </div>
+        </div>
 
         <script type="text/javascript" src="util.js"></script>
         <script type="text/javascript" src="heuristics.js"></script>

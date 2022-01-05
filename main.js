@@ -57,3 +57,34 @@ document.getElementById('cancel').onclick = function () {
     }
 };
 
+window.addEventListener("keydown", event => {
+    let neighbors = board.get_neighbors_of_tile(null);
+    switch(event.key) {
+        case "ArrowUp":
+        case "w":
+            //move the tile below the empty tile
+            board.make_action(neighbors[0]);
+            board.display();
+            break;
+        case "ArrowDown":
+        case "a":
+            //move the tile above the empty tile
+            board.make_action(neighbors[1]);
+            board.display();
+            break;
+        case "ArrowRight":
+        case "d":
+            //move the tile to the left of the empty tile
+            board.make_action(neighbors[2]);
+            board.display();
+            break;
+        case "ArrowLeft":
+        case "s":
+            //move the tile to the right of the empty tile
+            board.make_action(neighbors[3]);
+            board.display();
+            break;
+        default:
+            break;
+    }
+});
