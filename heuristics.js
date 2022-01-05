@@ -14,8 +14,8 @@ function num_wrong_heuristic(node) {
     for (let i = 0; i < num_rows; i++) {
        for (let j = 0; j < num_cols; j++) {
            const entry = state.get([i,j]);
-           const numeric_in_wrong_spot = (entry != null && entry !== i*num_cols + j + 1);
-           const empty_in_wrong_spot = (entry == null && !(i === num_rows-1 && j === num_cols-1));
+           const numeric_in_wrong_spot = (entry !== null && entry !== i*num_cols + j + 1);
+           const empty_in_wrong_spot = (entry === null && !(i === num_rows-1 && j === num_cols-1));
            if (numeric_in_wrong_spot || empty_in_wrong_spot) {
                num_wrong++;
            }

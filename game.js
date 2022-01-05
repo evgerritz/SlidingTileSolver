@@ -16,9 +16,10 @@ class Board {
             }
         }
         board_values[n-1][n-1] = null;
+
         board_values = math.matrix(board_values);
         this.solved_board = board_values;
-        if (start == null || !(this.is_valid_state(start))) {
+        if (start === null || !(this.is_valid_state(start))) {
             this.state = this.solved_board.clone();
         } else {
             this.state = math.matrix(start);
@@ -40,9 +41,6 @@ class Board {
               The number of dimensions matches that in board_size
               The state contains each number from 1 to board_size^2-1 exactly once
               The state contains an empty space (represented by None) */
-        function list_equal (lst1, lst2) {
-            return lst1.length === lst2.length && lst1.every((v, i) => v === lst2[i]);
-        }
         state = math.matrix(state);
         const n = this.board_size;
         const is_of_correct_dimensions = (state.size()[0] === n && state.size()[1] === n);
@@ -53,11 +51,15 @@ class Board {
         let has_empty_space = empty_space_idx > -1;
         if (has_empty_space) {
             flat_state.splice(empty_space_idx,1) //keep only integers
-        } else { return false }
+        } else { return false; }
 
         const sorted_vals = math.sort(flat_state);
         const correct_vals = math.range(1,n**2);
-        return list_equal(sorted_vals, correct_vals._data);
+        for (let i in sorted_vals) {
+            if (sorted_vals[i] !== correct_vals._data[i])
+                return false;
+        }
+        return true;
     }
 
     is_valid_coord(coord) {
@@ -171,7 +173,7 @@ class Board {
         for (let i = 0; i < num_rows; i++) {
             for (let j = 0; j < num_cols; j++) {
                 let entry = state.get([i, j]);
-                if (entry != null) {
+                if (entry !== null) {
                     tds[i*num_rows+j].innerHTML = entry.toString();         
                     tds[i*num_rows+j].setAttribute('onclick', 'board.make_action('+entry.toString()+'); board.display()');
                 } else {
@@ -181,22 +183,4 @@ class Board {
         }
     }
 }
-
-function create_new_board () {
-    let size = parseInt(document.getElementById('size').value);
-    let board = new Board(size);
-    board.display()
-    return board;
-}
-
-function solve_board (board) {
-    let method_name = document.getElementById('search_method').value;
-    let solver = new Function('return ' + method_name + '(board);')
-    let solution = solver();
-    document.getElementById("solution").innerText = solution.toString();
-    return solution;
-}
-
-let board = create_new_board();
-let solution;
 

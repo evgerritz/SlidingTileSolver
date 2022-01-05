@@ -26,28 +26,37 @@ function get_actions_to(node) {
     return actions;
 }
 
-function generic_search(state, empty_frontier, view=false) {
+async function check_for_events() {
+    return await new Promise(r => setTimeout(r, 10));
+}
+
+async function generic_search(state, empty_frontier, view=false) {
     let frontier = empty_frontier;
     let visited = new Set();
     let new_state = state.copy();
 
+    let max_nodes = 100000;
     let num_expanded = 0; //for statistics
+    
+    //let interval_id = setInterval(check_for_events, 1);
 
     let initial_node = new Node(new_state, null, null);
     frontier.push(initial_node);
-    while (!(frontier.is_empty())) {
+    while (!(frontier.is_empty()) && num_expanded < max_nodes && cancelled === false) {
+        await new Promise(r => setTimeout(r, 0));
         let node = frontier.pop();
         num_expanded += 1;
         new_state = node.state;
 
         if (new_state.is_solved()) {
             console.log(num_expanded);
+            //clearInterval(interval_id);
             return get_actions_to(node);
         }
 
-        let string_key = String(new_state.state);
-        if (!(visited.has(string_key))) {
-            visited.add(string_key);
+        //let string_key = String(new_state.state);
+        if (!(visited.has(new_state.state))) {//string_key))) {
+            visited.add(new_state.state);//string_key);
             for (let possible_action of new_state.get_valid_actions()) {
                 let resulting_state = new_state.copy();
                 resulting_state.make_action(possible_action);
@@ -57,6 +66,7 @@ function generic_search(state, empty_frontier, view=false) {
         }
     }
 
+    //clearInterval(interval_id);
     return []; //search failed
 }
 
@@ -75,10 +85,10 @@ function greedy_bfs(board, heuristic, view=false) {
     return generic_search(board, empty_frontier, view);
 }
 
-function astar(board, heuristic, view=false) {
+async function astar(board, heuristic, view=false) {
     let eval_func = node => heuristic(node) + node.cost;
     empty_frontier = new PriorityQueue(eval_func, item => item.state.state);
-    return generic_search(board, empty_frontier, view);
+    return await generic_search(board, empty_frontier, view);
 }
 
 function greedy_wrong(board, view=false) {
@@ -93,6 +103,6 @@ function greedy_manhattan(board, view=false) {
     return greedy_bfs(board, manhattan_dist_heuristic, view);
 }
 
-function astar_manhattan(board, view=false) {
-    return astar(board, manhattan_dist_heuristic, view);
+async function astar_manhattan(board, view=false) {
+    return await astar(board, manhattan_dist_heuristic, view);
 }

@@ -9,7 +9,7 @@
     <body>
         <center>
         <form>
-          <button type="button" onclick="board = create_new_board()">New Board</button>
+          <button type="button" id="new_board">Create Board</button>
           <label for="size">of size:</label>
           <select name="size" id="size">
             <option value="2">2</option>
@@ -19,7 +19,7 @@
           </select>
         </form>
         <br>
-        <button type="button" onclick="board.shuffle_board(); board.display()">Scramble</button>
+        <button type="button" id="scramble">Scramble</button>
         </center>
         <br>
 
@@ -33,16 +33,17 @@
 
         <center>
         <form>
-          <button type="button" onclick="solution = solve_board(board)">Solve</button>
+          <button type="button" id="solve">Solve</button>
           <label for="search_method">using: </label>
           <select name="search_method" id="search_method">
             <option value="bfs">Bredth-First Search</option>
             <option value="dfs">Depth-First Search</option>
             <option value="greedy_wrong">Greedy BFS with # Wrong Heuristic</option>
-            <option value="greedy_manhattan">Greedy Manhattan with # Wrong Heuristic</option>
+            <option value="greedy_manhattan">Greedy BFS with Manhattan Heuristic</option>
             <option value="astar_wrong">A* with # Wrong Heuristic</option>
             <option value="astar_manhattan" selected>A* with Manhattan Heuristic</option>
           </select>
+          <button type="button" id="cancel">Cancel</button>
         </form>
 
         <p id="solution"></p>
@@ -53,5 +54,6 @@
         <script type="text/javascript" src="search.js"></script>
         <script src="node_modules/mathjs/lib/browser/math.js"></script>
         <script type="text/javascript" src="game.js"></script>
+        <script type="text/javascript" src="main.js"></script>
     </body>
 </html>
