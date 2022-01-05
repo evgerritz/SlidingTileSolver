@@ -35,7 +35,7 @@ async function generic_search(state, empty_frontier, view=false) {
     let visited = new Set();
     let new_state = state.copy();
 
-    let max_nodes = 1000000;
+    let max_nodes = 100000;
     let num_expanded = 0; //for statistics
     
     //let interval_id = setInterval(check_for_events, 1);
@@ -68,6 +68,7 @@ async function generic_search(state, empty_frontier, view=false) {
         }
     }
 
+    console.log(num_expanded);
     //clearInterval(interval_id);
     return []; //search failed
 }
