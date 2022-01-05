@@ -35,7 +35,7 @@ async function generic_search(state, empty_frontier, view=false) {
     let visited = new Set();
     let new_state = state.copy();
 
-    let max_nodes = 100000;
+    let max_nodes = 300000;
     let num_expanded = 0; //for statistics
     
     let initial_node = new Node(new_state, null, null);

@@ -52,6 +52,8 @@ document.getElementById('solve').onclick = async function () {
 };
 
 document.getElementById('cancel').onclick = function () {
-    cancelled = true;
+    if (solving === true) {
+        cancelled = true;
+    }
 };
 

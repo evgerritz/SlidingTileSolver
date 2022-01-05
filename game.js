@@ -163,7 +163,7 @@ class Board {
                 let new_cell;
                 for (let j = 0; j < num_cols; j++) {
                     new_cell  = new_row.insertCell(new_row.cells.length);
-                    new_cell.setAttribute('style', 'border: 1px solid black; text-align: center');
+                    new_cell.className = 'tile_cell';
                 }
             }
         }
@@ -174,7 +174,7 @@ class Board {
             for (let j = 0; j < num_cols; j++) {
                 let entry = state.get([i, j]);
                 if (entry !== null) {
-                    tds[i*num_rows+j].innerHTML = entry.toString();         
+                    tds[i*num_rows+j].innerHTML = '<div class="tile"> <div class="tile_text">' + entry.toString() + '</div></div>';         
                     tds[i*num_rows+j].setAttribute('onclick', 'board.make_action('+entry.toString()+'); board.display()');
                 } else {
                     tds[i*num_rows+j].innerHTML = ' ';
