@@ -38,8 +38,6 @@ async function generic_search(state, empty_frontier, view=false) {
     let max_nodes = 100000;
     let num_expanded = 0; //for statistics
     
-    //let interval_id = setInterval(check_for_events, 1);
-
     let initial_node = new Node(new_state, null, null);
     frontier.push(initial_node);
     while (!(frontier.is_empty()) && num_expanded < max_nodes && cancelled === false) {
@@ -52,13 +50,12 @@ async function generic_search(state, empty_frontier, view=false) {
 
         if (new_state.is_solved()) {
             console.log(num_expanded);
-            //clearInterval(interval_id);
             return get_actions_to(node);
         }
 
-        //let string_key = String(new_state.state);
-        if (!(visited.has(new_state.state))) {//string_key))) {
-            visited.add(new_state.state);//string_key);
+        let string_key = String(new_state.state);
+        if (!(visited.has(string_key))) {
+            visited.add(string_key);
             for (let possible_action of new_state.get_valid_actions()) {
                 let resulting_state = new_state.copy();
                 resulting_state.make_action(possible_action);
@@ -69,7 +66,6 @@ async function generic_search(state, empty_frontier, view=false) {
     }
 
     console.log(num_expanded);
-    //clearInterval(interval_id);
     return []; //search failed
 }
 
