@@ -26,9 +26,6 @@ function get_actions_to(node) {
     return actions;
 }
 
-async function check_for_events() {
-    return await new Promise(r => setTimeout(r, 10));
-}
 
 async function generic_search(state, empty_frontier, view=false) {
     let frontier = empty_frontier;
@@ -59,6 +56,10 @@ async function generic_search(state, empty_frontier, view=false) {
             for (let possible_action of new_state.get_valid_actions()) {
                 let resulting_state = new_state.copy();
                 resulting_state.make_action(possible_action);
+                if (view) {
+                    await new Promise(r => setTimeout(r, 0));
+                    resulting_state.display()
+                }
                 const child = new Node(resulting_state, possible_action, node);
                 frontier.push(child);
             }

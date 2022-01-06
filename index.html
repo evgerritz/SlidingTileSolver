@@ -8,60 +8,142 @@
         <link rel="stylesheet" href="main.css">
     </head>
     <body>
-        <div class="header">
+        <header>
             <div class="container">
                 <div class="jumbotron">
-                    <h1>Sliding Tile Puzzle Solver</h1>
-                    <p>Interactive demo of various search algorithms.</p>
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-11">
+                        <h1>Sliding Tile Puzzle Solver</h1>
+                        <p>Interactive demonstration of various search algorithms, including BFS, DFS, Greedy BFS, and A*.</p>
+                        </div>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8">
-                    <center>
-                        <table id="display_table">
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </center>
-                </div>
+        <div class="bg-light" id="main_body">
+            <div class="container" id="demo_content">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <center>
+                            <table id="display_table">
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </center>
+                    </div>
 
-                <div class="col-sm-4">
-                    <form>
-                      <button type="button" id="new_board">Create Board</button>
-                      <label for="size">of size:</label>
-                      <select name="size" id="size">
-                        <option value="2">2</option>
-                        <option value="3" selected>3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </select>
-                    </form>
-                    <br>
-                    <button type="button" id="scramble">Scramble</button>
-                    <br>
+                    <div class="col-sm-4">
+                        <form>
+                          <button type="button" id="new_board">Create Board</button>
+                          <label for="size">of size:</label>
+                          <select name="size" id="size">
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                          </select>
+                          <label for="scramble">and</label>
+                          <button name="scramble" type="button" id="scramble">Scramble</button>   
+                        </form>
+                        <br>
 
 
-                    <center>
-                    <form>
-                      <button type="button" id="solve">Solve</button>
-                      <label for="search_method">using: </label>
-                      <select name="search_method" id="search_method">
-                        <option value="bfs">Bredth-First Search</option>
-                        <option value="dfs">Depth-First Search</option>
-                        <option value="greedy_wrong">Greedy BFS with # Wrong Heuristic</option>
-                        <option value="greedy_manhattan">Greedy BFS with Manhattan Heuristic</option>
-                        <option value="astar_wrong">A* with # Wrong Heuristic</option>
-                        <option value="astar_manhattan" selected>A* with Manhattan Heuristic</option>
-                      </select>
-                      <button type="button" id="cancel">Cancel</button>
-                    </form>
+                        <center>
+                        <form>
+                          <button type="button" id="solve" disabled>Solve</button>
+                          <label for="search_method">using: </label>
+                          <select name="search_method" id="search_method">
+                            <option hidden>Select a search algorithm</option>
+                            <option value="bfs">Breadth-First Search</option>
+                            <option value="dfs">Depth-First Search</option>
+                            <option value="greedy">Greedy BFS</option>
+                            <option value="astar">A* Search</option>
+                          </select>
+                          <button type="button" id="cancel" class="original" disabled>Cancel</button>
+                          <br>
+                          <div id="heuristic_div" style="display: none;" >
+                              <label for="heuristic">with</label>
+                              <select name="heuristic" id="heuristic">
+                                  <option hidden>Select a heuristic</option>
+                                  <option value="wrong"># of Misplaced Tiles</option>
+                                  <option value="manhattan">Manhattan Distance</option>
+                              </select>
+                              <button type="button" id="hidden_cancel" class="hidden" disabled>Cancel</button>
+                              <br>
+                          </div>
+                          <input type="checkbox" id="visualize" name="visualize" title="WARNING: Will significantly slow down search time.">
+                          <label for="visualize">Visualize search algorithm?</label>
+                        </form>
 
-                    <p id="solution"></p>
+                        <br>
+                        <br>
+                        <p id="solution"></p>
+                    </div>
                 </div>
             </div>
+
+            <br>
+            <br>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-11 col-md-offset-1">
+                        <br>
+                        <h1 id="usage">Usage</h1>
+                        <hr>
+                        <h4>What is a propositional formula?</h4>
+                        <p> A propositional formula is defined as follows:<br />
+                            Any string of letters (except for those strings which are also operators) is a propositional formula.<br />
+                            If <code>p</code> and <code>q</code> are propositional formulae, then the following are also propositional formulae:
+                        </p>
+                        <ul>
+                            <li><code>NOT p</code></li>
+                            <li><code>p OR q</code></li>
+                            <li><code>p AND q</code></li>
+                            <li><code>p XOR q</code></li>
+                            <li><code>p IFF q</code></li>
+                            <li><code>p IMPLIES q</code></li>
+                        </ul>
+                        <h4>Accepted Operators</h4>
+                        <h6>The following operators are supported (not case sensitive):</h6>
+                        <code>NOT, OR, AND, XOR, IFF, IMPLIES, NOR, NAND</code><br><br>
+                        <p>The following symbols are also aliased to the previous operators:</p>
+                        <ul>
+                            <li><code>NOT: ~, !, &lt;&gt;</code></li>
+                            <li><code>OR: |, +</code></li>
+                            <li><code>AND: &amp;, *</code></li>
+                            <li><code>XOR: ^</code></li>
+                            <li><code>IMPLIES: =&gt;, -&gt;</code></li>
+                            <li><code>IFF: &lt;=&gt;, &lt;-&gt;</code></li>
+                        </ul>
+                        <h4>Order of Evaluation</h4>
+                        <p>Parentheses can be added around any nested or top-level PF to control the order of evaluation. If no parentheses are present, evaluation will be determined by the following precedence hierarchy (from highest to lowest precedence, all operators assume right-to-left associativity):</p>
+                        <ol>
+                        <li><code>NOT</code><br /></li>
+                        <li><code>AND</code><br /></li>
+                        <li><code>XOR/NOR/NAND</code><br /></li>
+                        <li><code>OR</code><br /></li>
+                        <li><code>IMPLIES/IFF</code></li>
+                        </ol>
+                        <h4>Examples:</h4>
+                        <ul>
+                            <li><code>a AND NOT a</code></li>
+                            <li><code>a OR (b AND c)</code></li>
+                            <li><code>(a OR b) IFF (b AND (NOT (c AND d)))</code></li>
+                            <li><code>(a | b) <=> (b & (! (c & d)))</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <footer>
+                <br>
+                <br>
+                <center><p>&copy; Evan Gerritz, 2021</p></center>
+            </footer>
         </div>
 
         <script type="text/javascript" src="util.js"></script>
