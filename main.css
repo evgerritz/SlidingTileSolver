@@ -25,31 +25,58 @@ header {
     background: #dfe6e9;
 }
 
-.tile_cell {
+.tile_cell, .solution_move {
     aspect-ratio: 1;
-    border-radius: 10px;
     position: relative;
     background: #636e72;
+    cursor: pointer;
 }
 
- 
-.tile_text {
+.tile_cell {
+    border-radius: 10px;
+}
+
+.solution_move {
+    height: 30px;
+    width: 30px;
+    border-radius: 5px;
+    margin: 1px;
+}
+
+.tile_text, .solution_text {
     font-family: Helvetica, Arial, sans-serif;
     color: white;
-    font-size: 250%;
-    text-align: center;
-    vertical-align: middle;
 }
+
+.tile_text {
+    font-size: 250%;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.solution_text {
+    display: table;
+    margin: 0 auto;
+    margin-top: 2px;
+}
+
 
 #empty_tile {
     background: #dfe6e9;
+    cursor: default;
 }
 
 #hidden_cancel {
     display: none;
 }
 
-button, select {
+.solution_row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+button, select, #cancel {
   align-items: center;
   background-color: #FCFCFD;
   border-radius: 4px;
@@ -65,9 +92,11 @@ button, select {
   line-height: 1;
   list-style: none;
   overflow: hidden;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 7px;
+  padding-right: 7px;
   margin-bottom: 10px;
+  margin-left: 1px;
+  margin-right: 1px;
   position: relative;
   text-align: left;
   text-decoration: none;
@@ -80,23 +109,66 @@ button, select {
   font-size: 13px;
 }
 
-button:focus {
+button, #cancel {
+    appearance: none;
+}
+
+button:focus, #cancel:focus {
   box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
 }
 
-button:hover {
+button:hover, #cancel:hover {
   box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
   transform: translateY(-2px);
 }
 
-button:active {
+button:active, #cancel:active {
   box-shadow: #D6D6E7 0 3px 7px inset;
   transform: translateY(2px);
 }
 
-button:disabled {
+button:disabled, #cancel:disabled {
     background-color: #dfe6e9; 
     pointer-events: none;
 }
 
+#visualize {
+    height: 15px;
+    width: 15px;
+    margin-top: 5px;
+}
 
+.search_info_labels {
+    font-size: 18px;
+}
+
+#nodes_expanded_label {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+#nodes_expanded {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+#solution {
+    /* Optional - You can set a  min-height : whatever px; for reserving some space*/
+    font-weight: bold;
+    height: 200px;
+    overflow: auto;
+}
+
+/*
+#solution_container{
+    height: 200px;
+    width: 100%;
+    overflow: hidden;
+}
+
+#solution {
+    width: 100%;
+    height: 99%;
+    overflow: auto;
+    padding-right: 15px;
+}*/

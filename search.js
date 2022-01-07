@@ -26,6 +26,10 @@ function get_actions_to(node) {
     return actions;
 }
 
+function cancelled() {
+    return document.getElementById('cancel').checked;     
+}
+
 
 async function generic_search(state, empty_frontier, view=false) {
     let frontier = empty_frontier;
@@ -34,20 +38,38 @@ async function generic_search(state, empty_frontier, view=false) {
 
     let max_nodes = 300000;
     let num_expanded = 0; //for statistics
+    let nodes_expanded_display = document.getElementById('nodes_expanded');
+
+    let cancelled_by_user = false;
     
     let initial_node = new Node(new_state, null, null);
     frontier.push(initial_node);
-    while (!(frontier.is_empty()) && num_expanded < max_nodes && cancelled === false) {
-        if (num_expanded % 1000 == 0) { //only refreshUI every 1000 nodes expanded
+    while (!(frontier.is_empty()) && num_expanded < max_nodes) {
+        //refresh UI, check if cancelled every 1000 nodes expanded
+        if (num_expanded % 1000 == 0) { 
+            if (num_expanded != 0) {
+                nodes_expanded_display.innerText = num_expanded/1000 + 'k';
+            }
             await new Promise(r => setTimeout(r, 0));
+
+            if (cancelled()) {
+                cancelled_by_user = true;
+                document.getElementById('cancel').checked = false;     
+                break;
+            }
         }
+
         let node = frontier.pop();
         num_expanded += 1;
+        
         new_state = node.state;
 
         if (new_state.is_solved()) {
-            console.log(num_expanded);
-            return get_actions_to(node);
+            return {
+                success: true,
+                solution: get_actions_to(node),
+                num_expanded: num_expanded
+            };
         }
 
         let string_key = String(new_state.state);
@@ -66,8 +88,14 @@ async function generic_search(state, empty_frontier, view=false) {
         }
     }
 
-    console.log(num_expanded);
-    return []; //search failed
+    //search failed:
+    // either bc max nodes expaneded, or cancelled, or no solution (never true for tile puzzle), 
+    return {
+        success: false,
+        was_cancelled: cancelled_by_user,
+        solution: [],
+        num_expanded: num_expanded
+    };
 }
 
 function bfs(board, view=false) {

@@ -49,7 +49,6 @@
                         <br>
 
 
-                        <center>
                         <form>
                           <button type="button" id="solve" disabled>Solve</button>
                           <label for="search_method">using: </label>
@@ -60,25 +59,34 @@
                             <option value="greedy">Greedy BFS</option>
                             <option value="astar">A* Search</option>
                           </select>
-                          <button type="button" id="cancel" class="original" disabled>Cancel</button>
+                          <button type="checkbox" id="cancel" class="original" disabled>Cancel</button>
                           <br>
                           <div id="heuristic_div" style="display: none;" >
                               <label for="heuristic">with</label>
                               <select name="heuristic" id="heuristic">
-                                  <option hidden>Select a heuristic</option>
+                                  <option hidden value="">Select a heuristic</option>
                                   <option value="wrong"># of Misplaced Tiles</option>
-                                  <option value="manhattan">Manhattan Distance</option>
+                                  <option value="manhattan">Sum of Manhattan Distances</option>
                               </select>
-                              <button type="button" id="hidden_cancel" class="hidden" disabled>Cancel</button>
-                              <br>
+                              <button type="checkbox" id="hidden_cancel" class="hidden" disabled>Cancel</button>
                           </div>
-                          <input type="checkbox" id="visualize" name="visualize" title="WARNING: Will significantly slow down search time.">
-                          <label for="visualize">Visualize search algorithm?</label>
+                          <label for="visualize">
+                              <input type="checkbox" id="visualize" name="visualize" title="WARNING: Will significantly slow down search time.">
+                              <span>Visualize search algorithm?</span></label>
                         </form>
-
-                        <br>
-                        <br>
-                        <p id="solution"></p>
+                        <hr>
+                        <div id="nodes_expanded_label" class="search_info_labels">
+                            Search nodes expanded:
+                            <br>
+                            <center>
+                                <span id="nodes_expanded">0</span>
+                            </center>
+                        </div>
+                        <div id="solution_container" class="search_info_labels">
+                            Solution:
+                            <div id="solution"> 
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -86,11 +94,11 @@
             <br>
             <br>
 
-            <div class="container">
+            <div class="container" id="about">
                 <div class="row">
                     <div class="col-lg-11 col-md-offset-1">
                         <br>
-                        <h1 id="usage">Usage</h1>
+                        <h1>About</h1>
                         <hr>
                         <h4>What is a propositional formula?</h4>
                         <p> A propositional formula is defined as follows:<br />
@@ -142,7 +150,7 @@
             <footer>
                 <br>
                 <br>
-                <center><p>&copy; Evan Gerritz, 2021</p></center>
+                <center><p>Made by Evan Gerritz, 2021</p></center>
             </footer>
         </div>
 

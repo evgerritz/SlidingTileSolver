@@ -27,8 +27,8 @@ class Board {
     }
 
     shuffle_board() {
-        let n_cubed = this.board_size**3
-        for (let i = 0; i < n_cubed; i++) {
+        let most_possible_moves = this.board_size**4;
+        for (let i = 0; i < most_possible_moves; i++) {
             const valid_moves = this.get_valid_actions();
             const rand_idx = Math.floor(Math.random() * valid_moves.length);
             const move = valid_moves[rand_idx];
@@ -153,11 +153,12 @@ class Board {
         return flattened;
     }
 
-    display(state=null) {
-        if (state === null) {
-            state=this.state;
-        }
-        
+    make_move_on_click_fn(move) {
+        let move_fn = new Function('display_func', 'board', 'board.make_action('+move.toString()+'); board.display()');
+        return () => { move_fn(display_board, board) };
+    }
+
+    display() {
         let is_first_draw = (document.getElementsByTagName("td").length !== this.board_size**2);
         let table_ref = document.getElementsByTagName('tbody')[0];
         if (is_first_draw) {
@@ -165,7 +166,7 @@ class Board {
                 table_ref.removeChild(table_ref.firstChild);
             }
             let num_rows, num_cols, new_row;
-            [num_rows, num_cols] = state.size();
+            [num_rows, num_cols] = this.state.size();
             for (let i = 0; i < num_rows; i++) {
                 new_row = table_ref.insertRow(table_ref.rows.length);
                 let new_cell;
@@ -177,17 +178,19 @@ class Board {
         }
         let tds = document.getElementsByTagName("td");
         let num_rows, num_cols;
-        [num_rows, num_cols] = state.size();
+        [num_rows, num_cols] = this.state.size();
         for (let i = 0; i < num_rows; i++) {
             for (let j = 0; j < num_cols; j++) {
-                let entry = state.get([i, j]);
+                let entry = this.state.get([i, j]);
+                let current_td = tds[i*num_rows+j];
                 if (entry !== null) {
-                    tds[i*num_rows+j].id = '';
-                    tds[i*num_rows+j].innerHTML = '<div class="tile_text">' + entry.toString() + '</div>';         
-                    tds[i*num_rows+j].setAttribute('onclick', 'board.make_action('+entry.toString()+'); board.display()');
+                    current_td.id = '';
+                    current_td.innerHTML = '<div class="tile_text">' + entry.toString() + '</div>';         
+                    current_td.onclick = this.make_move_on_click_fn(entry);
                 } else {
-                    tds[i*num_rows+j].id = 'empty_tile';
-                    tds[i*num_rows+j].innerHTML = '';//'<div id="empty_tile"></div>';
+                    current_td.id = 'empty_tile';
+                    current_td.innerHTML = '';
+                    current_td.setAttribute('onclick', '');
                 } 
             }
         }
