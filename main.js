@@ -1,5 +1,4 @@
 /**
- * @class       : main
  * @author      : Evan Gerritz (evan.gerritz@yale.edu)
  * @created     : Sunday Jan 02, 2022 17:10:34 EST
  * @description : main
