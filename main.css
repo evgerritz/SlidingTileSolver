@@ -15,7 +15,8 @@ header {
 }
 
 #display_table {
-    width: 60%;
+    width: 70%;
+    margin: 0 auto;
     table-layout: fixed;
     aspect-ratio: 1;
 
@@ -153,22 +154,28 @@ button:disabled, #cancel:disabled {
 }
 
 #solution {
-    /* Optional - You can set a  min-height : whatever px; for reserving some space*/
     font-weight: bold;
     height: 200px;
     overflow: auto;
 }
 
-/*
-#solution_container{
-    height: 200px;
-    width: 100%;
-    overflow: hidden;
+#search_size_table {
+    border-collapse: border;
+    margin: 0 auto;
 }
 
-#solution {
-    width: 100%;
-    height: 99%;
-    overflow: auto;
-    padding-right: 15px;
-}*/
+#search_size_table td, #search_size_table th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+    size: 20px;
+}
+
+#search_size_table td.smaller_text {
+    size: 15px;
+}
+
+footer p {
+    text-align: center;
+}
+ }

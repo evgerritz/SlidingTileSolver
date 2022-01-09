@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "immutable": "^4.0.0",
     "mathjs": "^9.4.4"
   }
 }

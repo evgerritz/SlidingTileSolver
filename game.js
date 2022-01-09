@@ -154,8 +154,8 @@ class Board {
     }
 
     make_move_on_click_fn(move) {
-        let move_fn = new Function('display_func', 'board', 'board.make_action('+move.toString()+'); board.display()');
-        return () => { move_fn(display_board, board) };
+        let move_fn = new Function('board', 'board.make_action('+move.toString()+'); board.display()');
+        return () => { move_fn(this) };
     }
 
     display() {
@@ -186,7 +186,7 @@ class Board {
                 if (entry !== null) {
                     current_td.id = '';
                     current_td.innerHTML = '<div class="tile_text">' + entry.toString() + '</div>';         
-                    current_td.onclick = this.make_move_on_click_fn(entry);
+                    current_td.onclick = this.make_move_on_click_fn(entry); 
                 } else {
                     current_td.id = 'empty_tile';
                     current_td.innerHTML = '';

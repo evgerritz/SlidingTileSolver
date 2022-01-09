@@ -3,11 +3,17 @@
     <head>
         <title>Sliding Tile Puzzle Solver</title>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link rel="stylesheet" href="main.css">
+        <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <!-- Mathjax -->
+        <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"> </script>       
     </head>
-    <body>
+    <body class="bg-light">
         <header>
             <div class="container">
                 <div class="jumbotron">
@@ -25,12 +31,10 @@
             <div class="container" id="demo_content">
                 <div class="row">
                     <div class="col-sm-8">
-                        <center>
-                            <table id="display_table">
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </center>
+                        <table id="display_table">
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
 
                     <div class="col-sm-4">
@@ -38,10 +42,10 @@
                           <button type="button" id="new_board">Create Board</button>
                           <label for="size">of size:</label>
                           <select name="size" id="size">
-                            <option value="2">2</option>
-                            <option value="3" selected>3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
+                            <option value="2">4</option>
+                            <option value="3" selected>9</option>
+                            <option value="4">16</option>
+                            <option value="5">25</option>
                           </select>
                           <label for="scramble">and</label>
                           <button name="scramble" type="button" id="scramble">Scramble</button>   
@@ -93,71 +97,119 @@
 
             <br>
             <br>
+            <br>
 
             <div class="container" id="about">
                 <div class="row">
                     <div class="col-lg-11 col-md-offset-1">
-                        <br>
                         <h1>About</h1>
                         <hr>
-                        <h4>What is a propositional formula?</h4>
-                        <p> A propositional formula is defined as follows:<br />
-                            Any string of letters (except for those strings which are also operators) is a propositional formula.<br />
-                            If <code>p</code> and <code>q</code> are propositional formulae, then the following are also propositional formulae:
+                        <h4>Introduction</h4>
+                        <p> 
+                            The 8-puzzle, 15-puzzle, and other variations of sliding tile puzzles are classic examples
+                            of problems that can be solved using search techniques, even
+                            being mentioned in AIMA's section on standardized problems for search techniques.
                         </p>
+                        <h4>Search Methods</h4>
+                        <p> 
+                            This demonstration includes two non-heuristic methods (breadth-first and depth-first search), along with
+                            two heuristic search methods (greedy breadth-first sear), with two heuristics for each. 
+                            It also keeps track of how many search nodes the algorithm needed to expand before finding its solution.
+                            Thus, by applying different search methods to the same starting state, one can get an informal sense of
+                            how effective these search variations are.
+                        </p>
+                        <h4>Heuristics</h4>
+                        <p>
+                            The two heuristics included are the number-of-misplaced-tiles and and the Manhattan-distance heuristics.
+                            In this application of heuristic search, these heuristics guess how many more moves might be required in the solution. 
+                            The number-of-misplaced-tiles heuristic, as implied by the name, assigns to each state in consideration the number of tiles out of place.
+                            The Manhattan-distance heuristic assigns to each state the sum of the Manhattan distances of each tile from its correct location.
+                            I claim (but you can use the demo above to convince yourself!) that the Manhattan distance heuristic tends to find a solution faster
+                            than number-of-misplaced-tiles, since, for admissible heuristics (more on that in the next paragraph), a heuristic that on average
+                            assigns larger values to states than another heuristic tends to find an optimal solution after expanding fewer nodes.
+                            It is clear that the value assigned to a state by the Manhattan distance is always at least that assigned by the
+                            number-of-misplaced-tiles heuristics.
+                        </p>
+                        <h4>Comparison of Outputs</h4>
+                        <p> 
+                            Note that these search algorithms will not all find the same solutions.
+                            In particular, depth-first search and greedy BFS, are both non-optimal in that they are not guaranteed to
+                            return the best solution (i.e, the one requiring the fewest moves). One can observe through experimentation that
+                            DFS, in particular, can often result in solutions that are orders of magnitude larger in length than that of the optimal solution.
+                            A* is optimal so long as the heuristic is admissible, which means that the true number of
+                            moves away from the optimal solution from that state is never more than the guess made by our heuristic.
+                            Our two heuristics are admissible because they both solved relaxed versions of the sliding tile problem.
+                            To be precise, the number of misplaced tiles is equivalent to the path cost of a version of the problem in which any
+                            tile can be put in its correct place in one move; the Manhattan distance heuristic is equivalent to the path cost of a version of the problem
+                            in which tiles can overlap (i.e, multiple tiles can be placed in one location).
+                        </p>
+                        <h4>Technical Limitations</h4>
+                        <p>
+                            Because sets in JS compare objects by reference and not element-wise equality, for the search algorithm to remember which states have been visited,
+                            each state that is explored has to be converted to a string. This significantly slows down execution.
+                            Due to this slowness, a search will automatically stop if 300,000 nodes have been expanded without finding a solution (as
+                            this is roughly after how much time I lose patience waiting for a solution).
+                            Given this cap, how likely is it that a solution is found? We can get a sense of it by considering the ratio of the maximum number of search nodes
+                            we allow ourselves to visit to the total number of unique states in the search space, as in the following chart:
+                        </p>
+                        <table id="search_size_table">
+                            <tr>
+                                <th>Board size</th>
+                                <th>Size of search space</th>
+                                <th>Ratio of max nodes to the size of the search space</th>
+                            </tr>
+                            <tr>
+                                <td>\( n \) <br> <span class="smaller_text">\( (n\geq 4, \sqrt{n} \in \mathbb{N})\)</span></td>
+                                <td>\( \frac{n!}{2} \)</td>
+                                <td>\( \frac{300{,}000}{\frac{n!}{2}} \)</td>
+                            </tr>
+                            <tr>
+                                <td>\( 4 \)</td>
+                                <td>\( 12 \)</td>
+                                <td>\( &gt;1 \)</td>
+                            </tr>
+                            <tr>
+                                <td>\( 9 \)</td>
+                                <td>\( 181{,}440 \)</td>
+                                <td>\( &gt;1 \)</td>
+                            </tr>
+                            <tr>
+                                <td>\( 16 \)</td>
+                                <td>\( 10{,}461{,}394{,}944{,}000 \)</td>
+                                <td>\( 0.000000028676863994324312 \)</td>
+                            </tr>
+                            <tr>
+                                <td>\( 25 \)</td>
+                                <td>\( 7{,}755{,}605{,}021{,}665{,}493{,}000{,}000{,}000 \)</td>
+                                <td>\( 0.00000000000000000003868170170630684 \)</td>
+                            </tr>
+                        <table>
+                        <br>
+                        <p>
+                            From this chart, we can see that the boards of sizes 4 and 9 will always be solved, but a solution should almost never be found for the boards of sizes 16 and 25.
+                            However, as one can gleam from playing around with boards of size 16, A* with the Manhattan heuristic can solve boards of size 16 with surprising frequency, a
+                            testament to its intelligence in deciding in which order to check states!
+                        </p>
+                        <h4>Acknowledgments</h4>
                         <ul>
-                            <li><code>NOT p</code></li>
-                            <li><code>p OR q</code></li>
-                            <li><code>p AND q</code></li>
-                            <li><code>p XOR q</code></li>
-                            <li><code>p IFF q</code></li>
-                            <li><code>p IMPLIES q</code></li>
-                        </ul>
-                        <h4>Accepted Operators</h4>
-                        <h6>The following operators are supported (not case sensitive):</h6>
-                        <code>NOT, OR, AND, XOR, IFF, IMPLIES, NOR, NAND</code><br><br>
-                        <p>The following symbols are also aliased to the previous operators:</p>
-                        <ul>
-                            <li><code>NOT: ~, !, &lt;&gt;</code></li>
-                            <li><code>OR: |, +</code></li>
-                            <li><code>AND: &amp;, *</code></li>
-                            <li><code>XOR: ^</code></li>
-                            <li><code>IMPLIES: =&gt;, -&gt;</code></li>
-                            <li><code>IFF: &lt;=&gt;, &lt;-&gt;</code></li>
-                        </ul>
-                        <h4>Order of Evaluation</h4>
-                        <p>Parentheses can be added around any nested or top-level PF to control the order of evaluation. If no parentheses are present, evaluation will be determined by the following precedence hierarchy (from highest to lowest precedence, all operators assume right-to-left associativity):</p>
-                        <ol>
-                        <li><code>NOT</code><br /></li>
-                        <li><code>AND</code><br /></li>
-                        <li><code>XOR/NOR/NAND</code><br /></li>
-                        <li><code>OR</code><br /></li>
-                        <li><code>IMPLIES/IFF</code></li>
-                        </ol>
-                        <h4>Examples:</h4>
-                        <ul>
-                            <li><code>a AND NOT a</code></li>
-                            <li><code>a OR (b AND c)</code></li>
-                            <li><code>(a OR b) IFF (b AND (NOT (c AND d)))</code></li>
-                            <li><code>(a | b) <=> (b & (! (c & d)))</code></li>
+                            <li>Brian Scassellati's CPSC 475 (Spring 2021)</li>
+                            <li>Russell, Stuart J., and Peter Norvig. Artificial Intelligence: A Modern Approach. Pearson, 2020. </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-
-
             <footer>
                 <br>
-                <br>
-                <center><p>Made by Evan Gerritz, 2021</p></center>
+                <p><b>Made by Evan Gerritz, 2021</b></p>
             </footer>
         </div>
 
+        <!-- Execute JS - order here matters for dependencies!-->
+        <script src="node_modules/mathjs/lib/browser/math.js"></script>
         <script type="text/javascript" src="util.js"></script>
         <script type="text/javascript" src="heuristics.js"></script>
         <script type="text/javascript" src="search.js"></script>
-        <script src="node_modules/mathjs/lib/browser/math.js"></script>
         <script type="text/javascript" src="game.js"></script>
         <script type="text/javascript" src="main.js"></script>
     </body>
