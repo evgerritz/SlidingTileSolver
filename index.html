@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <form>
+                        <form onsubmit="return false;">
                           <button type="button" id="new_board">Create Board</button>
                           <label for="size">of size:</label>
                           <select name="size" id="size">
@@ -65,6 +65,7 @@
                           </select>
                           <button type="checkbox" id="cancel" class="original" disabled>Cancel</button>
                           <br>
+                          <form>
                           <div id="heuristic_div" style="display: none;" >
                               <label for="heuristic">with</label>
                               <select name="heuristic" id="heuristic">
@@ -74,6 +75,7 @@
                               </select>
                               <button type="checkbox" id="hidden_cancel" class="hidden" disabled>Cancel</button>
                           </div>
+                          <form>
                           <label for="visualize">
                               <input type="checkbox" id="visualize" name="visualize" title="WARNING: Will significantly slow down search time.">
                               <span>Visualize search algorithm?</span></label>

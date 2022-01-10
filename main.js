@@ -158,7 +158,7 @@
 
     // idea: want the cancel 'button' (checkbox) to appear like a button to the user,
     // but in fact be a toggle that the search function can periodically read
-    document.getElementById('cancel').onclick = function (event) {
+    let cancel_func = function (event) {
         // don't want user to be able to change status of cancel 'button'
         event.preventDefault();
         //and it should only change when a solution is onging
@@ -166,7 +166,10 @@
             document.getElementById('cancel').checked = true;
             solving = false;
         } 
+        return false;
     };
+    document.getElementById('cancel').onclick = cancel_func;
+    document.getElementById('hidden_cancel').onclick = cancel_func;
 
     window.addEventListener("keydown", event => {
         let neighbors = board.get_neighbors_of_tile(null);
