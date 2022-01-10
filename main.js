@@ -4,6 +4,11 @@
  * @description : main
  */
 
+/*
+ * Execution starts here.
+ * This file sets up all of the interactivity available to the user.
+ */
+
 (function () {
     let board = create_new_board();
     let solving = false;
@@ -77,7 +82,13 @@
 
     document.getElementById('size').onchange = function () {
         board = create_new_board();
+        if (document.getElementById('size').value >= 4) {
+            document.getElementById('visualize').disabled = "disabled";
+        } else {
+            document.getElementById('visualize').disabled = false;
+        }
     }
+
     document.getElementById('search_method').onchange = function () {
         if (solving === false) {
             document.getElementById('solve').disabled = false;
@@ -127,6 +138,8 @@
             document.getElementById('demo_content').style = 'cursor: progress;';
 
             let solution_elmnt = document.getElementById("solution");
+            solution_elmnt.innerText = '';
+            document.getElementById("nodes_expanded").innerText = 0;
             solution_elmnt.innerText = '';
 
             //attempt to find a solution
