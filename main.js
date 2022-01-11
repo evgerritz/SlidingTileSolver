@@ -13,6 +13,7 @@
     let board = create_new_board();
     let solving = false;
 
+    //boolean object
     const is_heuristic_search = {
         'bfs':false,
         'dfs':false,
@@ -20,18 +21,17 @@
         'astar':true
     };
 
-    document.getElementById('cancel').checked = false;
-    
     function make_move_on_click_fn(move) {
+        //need to programmatically make new functions for the onclick events based on the current text inside the tile
         let move_fn = new Function('board', 'board.make_action('+move.toString()+'); board.display()');
         return () => { move_fn(board) };
     }
 
     function create_new_board () {
         let size = parseInt(document.getElementById('size').value);
-        let board = new Board(size);
-        board.display();
-        return board;
+        let new_board = new Board(size);
+        new_board.display();
+        return new_board;
     }
 
     async function solve_board (board) {
@@ -80,6 +80,9 @@
              
     }
 
+    //initially want cancel to be "unchecked", i.e. disabled
+    document.getElementById('cancel').checked = false;
+    
     document.getElementById('size').onchange = function () {
         board = create_new_board();
         if (document.getElementById('size').value >= 4) {
@@ -89,6 +92,8 @@
         }
     }
 
+    // whenever search method changes need to hide the old cancel, show the new
+    // also make solve clickable
     document.getElementById('search_method').onchange = function () {
         if (solving === false) {
             document.getElementById('solve').disabled = false;
@@ -96,9 +101,12 @@
 
         let hidden_cancel = document.getElementsByClassName('hidden')[0]
         let original_cancel = document.getElementsByClassName('original')[0]
+
+        //is the currently selected method heuristic?
         if (is_heuristic_search[document.getElementById('search_method').value] ) {
             document.getElementById('heuristic_div').style = 'display: block;';
             if (document.getElementById('heuristic').value === '') {
+                // but still ensure solve is not clickable
                 document.getElementById('solve').disabled = true;
             }
             if (hidden_cancel.id === 'hidden_cancel') {
@@ -106,6 +114,7 @@
                 original_cancel.id = 'hidden_cancel';
             }
         } else {
+            //if not, need to make sure the heuristic interface is hidden
             document.getElementById('heuristic_div').style = 'display: none;';
             if (original_cancel.id === 'hidden_cancel') {
                 original_cancel.id = 'cancel';
@@ -114,6 +123,8 @@
         }
     };
 
+    // solve buttton should be clickable once a heuristic is selected
+    // invariant: in order for heuristic to be selected, heuristic search method must also be selected
     document.getElementById('heuristic').onchange = function () {
         document.getElementById('solve').disabled = false;
     }
@@ -140,7 +151,6 @@
             let solution_elmnt = document.getElementById("solution");
             solution_elmnt.innerText = '';
             document.getElementById("nodes_expanded").innerText = 0;
-            solution_elmnt.innerText = '';
 
             //attempt to find a solution
             solution_object = await solve_board(board);
@@ -151,6 +161,8 @@
             document.getElementById('solve').disabled = false;
             document.getElementById('cancel').disabled = true;
             document.getElementById('demo_content').style = 'cursor: normal;';
+
+            //delay 250 ms
             await new Promise(r => setTimeout(r, 250));
             board.display();
         }
@@ -171,6 +183,7 @@
     document.getElementById('cancel').onclick = cancel_func;
     document.getElementById('hidden_cancel').onclick = cancel_func;
 
+    //also allow for arrow key controls
     window.addEventListener("keydown", event => {
         let neighbors = board.get_neighbors_of_tile(null);
         

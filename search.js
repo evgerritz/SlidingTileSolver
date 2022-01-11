@@ -5,18 +5,20 @@
  * @description : search
  */
 
-// depends upon util.js
+// depends upon util.js for queue, stack, priority queue implementations
 
 //Node class used by search to keep track of cost and the current sequence of actions
 class Node {
     constructor (state, action, parent_node) {
         this.state = state;
+        // all moves are of equal cost (1)
         this.cost = (parent_node) ? parent_node.cost + 1 : 0;
         this.action = action;
         this.parent_node = parent_node
     }
 }
 
+// traverse backwards through the node tree to assemble the sequence of moves that led to the goal state
 function get_actions_to(node) {
     let actions = [];
     while (node.parent_node !== null) {
@@ -31,6 +33,10 @@ function cancelled() {
 }
 
 
+// - all search techniques use the same main algorithm, 
+// with the only difference being the order in which states are checked,
+// which in fact is entirely determined by type of the frontier used
+// - returns a "solution object" with success, was_cancelled, solution, and num_expanded fields
 async function generic_search(state, empty_frontier, view=false) {
     let frontier = empty_frontier;
     let visited = new Set();
@@ -40,16 +46,21 @@ async function generic_search(state, empty_frontier, view=false) {
     let num_expanded = 0; //for statistics
     let nodes_expanded_display = document.getElementById('nodes_expanded');
 
+    //boolean flag to later distinguish different causes of search failure
     let cancelled_by_user = false;
     
     let initial_node = new Node(new_state, null, null);
     frontier.push(initial_node);
+
+    // are there still nodes to check?
     while (!(frontier.is_empty()) && num_expanded < max_nodes) {
-        //refresh UI, check if cancelled every 1000 nodes expanded
+        // every 1000 nodes:
+        // refresh UI, check if cancelled
         if (num_expanded % 1000 == 0) { 
             if (num_expanded != 0) {
                 nodes_expanded_display.innerText = num_expanded/1000 + 'k';
             }
+            // "wait" 0 ms
             await new Promise(r => setTimeout(r, 0));
 
             if (cancelled()) {
@@ -59,22 +70,29 @@ async function generic_search(state, empty_frontier, view=false) {
             }
         }
 
+        //get the next node
         let node = frontier.pop();
         num_expanded += 1;
         
         new_state = node.state;
 
+        // successfuly reached the goal state!
         if (new_state.is_solved()) {
             return {
                 success: true,
+                was_cancelled: false,
                 solution: get_actions_to(node),
                 num_expanded: num_expanded
             };
         }
 
+        // need to make string key for storing states in a set
+        // this is the main bottleneck! AGH!, but afaik there is no work around,
+        // without completely rewriting a set data structure from scratch.
         let string_key = String(new_state.state);
         if (!(visited.has(string_key))) {
             visited.add(string_key);
+            //add each possible next state from the state being checked
             for (let possible_action of new_state.get_valid_actions()) {
                 let resulting_state = new_state.copy();
                 resulting_state.make_action(possible_action);
@@ -98,37 +116,46 @@ async function generic_search(state, empty_frontier, view=false) {
     };
 }
 
-function bfs(board, view=false) {
+// the remaining search functions are extensions of generic_search
+// they create the frontier of the corresponding type and then call generic_search
+
+// bfs is search with a queue: FIFO
+async function bfs(board, view=false) {
     let empty_frontier = new Queue();
-    return generic_search(board, empty_frontier, view);
+    return await generic_search(board, empty_frontier, view);
 }
 
-function dfs(board, view=false) {
+// bfs is search with a stack: LIFO
+async function dfs(board, view=false) {
     let empty_frontier = new Stack();
-    return generic_search(board, empty_frontier, view);
+    return await generic_search(board, empty_frontier, view);
 }
 
-function greedy_bfs(board, heuristic, view=false) {
+// greedy_bfs is search with a priority queue (PQ) using the supplied heuristic
+async function greedy_bfs(board, heuristic, view=false) {
     let empty_frontier = new PriorityQueue(heuristic, item => item.state.state);
-    return generic_search(board, empty_frontier, view);
+    return await generic_search(board, empty_frontier, view);
 }
 
+// greedy_bfs is search with a priority queue (PQ) using the supplied heuristic
 async function astar(board, heuristic, view=false) {
     let eval_func = node => heuristic(node) + node.cost;
     empty_frontier = new PriorityQueue(eval_func, item => item.state.state);
     return await generic_search(board, empty_frontier, view);
 }
 
-function greedy_wrong(board, view=false) {
-    return greedy_bfs(board, num_wrong_heuristic, view);
+//these next four functions just populate greedy and astar with the available heuristics
+
+async function greedy_wrong(board, view=false) {
+    return await greedy_bfs(board, num_wrong_heuristic, view);
 }
 
-function astar_wrong(board, view=false) {
-    return astar(board, num_wrong_heuristic, view);
+async function astar_wrong(board, view=false) {
+    return await astar(board, num_wrong_heuristic, view);
 }
 
-function greedy_manhattan(board, view=false) {
-    return greedy_bfs(board, manhattan_dist_heuristic, view);
+async function greedy_manhattan(board, view=false) {
+    return await greedy_bfs(board, manhattan_dist_heuristic, view);
 }
 
 async function astar_manhattan(board, view=false) {

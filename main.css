@@ -175,6 +175,15 @@ button:disabled, #cancel:disabled {
     size: 15px;
 }
 
+p {
+    text-indent: 30px;
+}
+
+p.to_be_continued {
+    margin-bottom: 5px;
+}
+
 footer p {
     text-align: center;
+    text-indent: 0px;
 }

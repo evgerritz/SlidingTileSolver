@@ -21,7 +21,7 @@
                         <div class="col-sm-1"></div>
                         <div class="col-sm-11">
                         <h1>Sliding Tile Puzzle Solver</h1>
-                        <p>Interactive demonstration of various search algorithms, including BFS, DFS, Greedy BFS, and A*.</p>
+                        <h5>Interactive demonstration of various search algorithms, including BFS, DFS, Greedy BFS, and A*.</h5>
                         </div>
                 </div>
             </div>
@@ -107,15 +107,18 @@
                         <h1>About</h1>
                         <hr>
                         <h4>Introduction</h4>
-                        <p> 
-                            The 8-puzzle, 15-puzzle, and other variations of sliding tile puzzles are classic examples
-                            of problems that can be solved using search techniques, even
-                            being mentioned in AIMA's section on standardized problems for search techniques.
+                        <p class="to_be_continued">
+                            The 8-puzzle, 15-puzzle, and other variations of sliding tile puzzles are classic examples of problems that can be solved using search techniques, even
+                            being mentioned in AIMA's section on standardized problems for search techniques. 
+                        </p>
+                        <p>
+                            This demo is intended to be a tool to illustrate the differences in performance of various search algorithms. The board itself can be controlled either by clicking the tile you want to move the empty square,
+                            or by pushing the arrow/WASD key corresponding to the direction of how you want to move the (unique) piece available to be moved in that direction, if one exists.
                         </p>
                         <h4>Search Methods</h4>
                         <p> 
                             This demonstration includes two non-heuristic methods (breadth-first and depth-first search), along with
-                            two heuristic search methods (greedy breadth-first sear), with two heuristics for each. 
+                            two heuristic search methods (greedy breadth-first and A* search), with two heuristics for each. 
                             It also keeps track of how many search nodes the algorithm needed to expand before finding its solution.
                             Thus, by applying different search methods to the same starting state, one can get an informal sense of
                             how effective these search variations are.

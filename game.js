@@ -8,6 +8,8 @@
 class Board {
     constructor(n, start=null) {
         this.board_size = n;
+
+        //initialize the board values
         let board_values = [];
         for (let i = 0; i < n; i++) {
             board_values.push([]);
@@ -17,6 +19,7 @@ class Board {
         }
         board_values[n-1][n-1] = null;
 
+        // convert the board values into a matrix
         board_values = math.matrix(board_values);
         this.solved_board = board_values;
         if (start === null || !(this.is_valid_state(start))) {
@@ -26,6 +29,8 @@ class Board {
         }
     }
 
+    // make n^4 random moves, on current board where n is this size of the board
+    // by making random moves, we ensure that the scrambled board is still solvable
     shuffle_board() {
         let most_possible_moves = this.board_size**4;
         for (let i = 0; i < most_possible_moves; i++) {
@@ -70,6 +75,8 @@ class Board {
         return this.is_valid_coord(loc[0]) && this.is_valid_coord(loc[1])
     }
     
+    // return a list of (row, col) for the given tile
+    // or null on failure
     get_tile_location(tile) {
         let num_rows, num_cols;
         [num_rows, num_cols] = this.state.size();
@@ -83,8 +90,11 @@ class Board {
         return null;
     }
 
+    // returns the tile at the given location, where location is a list of (row, col)
     get_tile_from_location(location) {
-        return this.state.get([location[0], location[1]]);
+        if (is_valid_location(location)) {
+            return this.state.get([location[0], location[1]]);
+        }
     }
 
     get_neighbors_of_tile(tile) {
@@ -141,6 +151,7 @@ class Board {
         return new Board(this.board_size, this.state.clone());
     }
 
+    /* UNUSED FUNCTION:
     flatten(state) {
         let flattened = [];
         let num_cols, num_rows;
@@ -151,13 +162,15 @@ class Board {
             }
         }
         return flattened;
-    }
+    }*/
 
     make_move_on_click_fn(move) {
         let move_fn = new Function('board', 'board.make_action('+move.toString()+'); board.display()');
         return () => { move_fn(this) };
     }
 
+    // display will first draw the structure of the board if a board of the correct size doesn't already exist,
+    // and if it does exist, it will simply update its values
     display() {
         let is_first_draw = (document.getElementsByTagName("td").length !== this.board_size**2);
         let table_ref = document.getElementsByTagName('tbody')[0];

@@ -4,6 +4,10 @@
  * @description : util
  */
 
+/*
+ * This file contains the data structures used by search.js
+ */
+
 class Queue {
     constructor(items = null) {
         this.queue = (items !== null) ? items : [];
@@ -52,6 +56,7 @@ class Stack {
     }
 }
 
+//priority queue is implemented using a heap
 class PriorityQueue {
     constructor(priority_func = x => x, get_val_for_index_func = x => x, items = []) {
         this.cache = new Map(); 

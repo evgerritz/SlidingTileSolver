@@ -1,8 +1,11 @@
 /**
- * @class       : heuristics
  * @author      : Evan Gerritz (evan.gerritz@yale.edu)
  * @created     : Sunday Aug 22, 2021 14:28:04 EDT
  * @description : heuristics
+ */
+
+/*
+ * This file contains the two heuristics for the heuristic search algorithms
  */
 
 //Number Wrong heuristic calculates the number of tiles that are out of place
@@ -11,12 +14,16 @@ function num_wrong_heuristic(node) {
     let num_wrong = 0;
     let num_rows, num_cols;
     [num_rows, num_cols] = state.size();
-    for (let i = 0; i < num_rows; i++) {
-       for (let j = 0; j < num_cols; j++) {
+
+    //iterate through each location on the board
+    let i, j;
+    for (i = 0; i < num_rows; i++) {
+       for (j = 0; j < num_cols; j++) {
            const entry = state.get([i,j]);
            const numeric_in_wrong_spot = (entry !== null && entry !== i*num_cols + j + 1);
            const empty_in_wrong_spot = (entry === null && !(i === num_rows-1 && j === num_cols-1));
            if (numeric_in_wrong_spot || empty_in_wrong_spot) {
+               //incrementing whenever a tile is in the wrong spot
                num_wrong++;
            }
        } 
@@ -30,8 +37,9 @@ function manhattan_dist_heuristic(node) {
     let num_rows, num_cols;
     [num_rows, num_cols] = state.size();
     let distances = [];
-    for (let i = 0; i < num_rows; i++) {
-       for (let j = 0; j < num_cols; j++) {
+    let i, j;
+    for (i = 0; i < num_rows; i++) {
+       for (j = 0; j < num_cols; j++) {
            const entry = state.get([i, j]);
            let correct_j, correct_i;
            if (entry != null) {
