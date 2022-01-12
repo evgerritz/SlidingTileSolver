@@ -18,8 +18,7 @@
             <div class="container">
                 <div class="jumbotron">
                     <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-11">
+                        <div class="col-sm-11 offset-sm-1">
                         <h1>Sliding Tile Puzzle Solver</h1>
                         <h5>Interactive demonstration of various search algorithms, including BFS, DFS, Greedy BFS, and A*.</h5>
                         </div>
@@ -103,104 +102,102 @@
 
             <div class="container" id="about">
                 <div class="row">
-                    <div class="col-lg-11 col-md-offset-1">
-                        <h1>About</h1>
-                        <hr>
-                        <h4>Introduction</h4>
-                        <p class="to_be_continued">
-                            The 8-puzzle, 15-puzzle, and other variations of sliding tile puzzles are classic examples of problems that can be solved using search techniques, even
-                            being mentioned in AIMA's section on standardized problems for search techniques. 
-                        </p>
-                        <p>
-                            This demo is intended to be a tool to illustrate the differences in performance of various search algorithms. The board itself can be controlled either by clicking the tile you want to move the empty square,
-                            or by pushing the arrow/WASD key corresponding to the direction of how you want to move the (unique) piece available to be moved in that direction, if one exists.
-                        </p>
-                        <h4>Search Methods</h4>
-                        <p> 
-                            This demonstration includes two non-heuristic methods (breadth-first and depth-first search), along with
-                            two heuristic search methods (greedy breadth-first and A* search), with two heuristics for each. 
-                            It also keeps track of how many search nodes the algorithm needed to expand before finding its solution.
-                            Thus, by applying different search methods to the same starting state, one can get an informal sense of
-                            how effective these search variations are.
-                        </p>
-                        <h4>Heuristics</h4>
-                        <p>
-                            The two heuristics included are the number-of-misplaced-tiles and and the Manhattan-distance heuristics.
-                            In this application of heuristic search, these heuristics guess how many more moves might be required in the solution. 
-                            The number-of-misplaced-tiles heuristic, as implied by the name, assigns to each state in consideration the number of tiles out of place.
-                            The Manhattan-distance heuristic assigns to each state the sum of the Manhattan distances of each tile from its correct location.
-                            I claim (but you can use the demo above to convince yourself!) that the Manhattan distance heuristic tends to find a solution faster
-                            than number-of-misplaced-tiles, since, for admissible heuristics (more on that in the next paragraph), a heuristic that on average
-                            assigns larger values to states than another heuristic tends to find an optimal solution after expanding fewer nodes.
-                            It is clear that the value assigned to a state by the Manhattan distance is always at least that assigned by the
-                            number-of-misplaced-tiles heuristics.
-                        </p>
-                        <h4>Comparison of Outputs</h4>
-                        <p> 
-                            Note that these search algorithms will not all find the same solutions.
-                            In particular, depth-first search and greedy BFS, are both non-optimal in that they are not guaranteed to
-                            return the best solution (i.e, the one requiring the fewest moves). One can observe through experimentation that
-                            DFS, in particular, can often result in solutions that are orders of magnitude larger in length than that of the optimal solution.
-                            A* is optimal so long as the heuristic is admissible, which means that the true number of
-                            moves away from the optimal solution from that state is never more than the guess made by our heuristic.
-                            Our two heuristics are admissible because they both solved relaxed versions of the sliding tile problem.
-                            To be precise, the number of misplaced tiles is equivalent to the path cost of a version of the problem in which any
-                            tile can be put in its correct place in one move; the Manhattan distance heuristic is equivalent to the path cost of a version of the problem
-                            in which tiles can overlap (i.e, multiple tiles can be placed in one location).
-                        </p>
-                        <h4>Technical Limitations</h4>
-                        <p>
-                            Because sets in JS compare objects by reference and not element-wise equality, for the search algorithm to remember which states have been visited,
-                            each state that is explored has to be converted to a string. This significantly slows down execution.
-                            Due to this slowness, a search will automatically stop if 300,000 nodes have been expanded without finding a solution (as
-                            this is roughly after how much time I lose patience waiting for a solution).
-                            Given this cap, how likely is it that a solution is found? We can get a sense of it by considering the ratio of the maximum number of search nodes
-                            we allow ourselves to visit to the total number of unique states in the search space, as in the following chart:
-                        </p>
-                        <table id="search_size_table">
-                            <tr>
-                                <th>Board size</th>
-                                <th>Size of search space</th>
-                                <th>Ratio of max nodes to the size of the search space</th>
-                            </tr>
-                            <tr>
-                                <td>\( n \) <br> <span class="smaller_text">\( (n\geq 4, \sqrt{n} \in \mathbb{N})\)</span></td>
-                                <td>\( \frac{n!}{2} \)</td>
-                                <td>\( \frac{300{,}000}{\frac{n!}{2}} \)</td>
-                            </tr>
-                            <tr>
-                                <td>\( 4 \)</td>
-                                <td>\( 12 \)</td>
-                                <td>\( &gt;1 \)</td>
-                            </tr>
-                            <tr>
-                                <td>\( 9 \)</td>
-                                <td>\( 181{,}440 \)</td>
-                                <td>\( &gt;1 \)</td>
-                            </tr>
-                            <tr>
-                                <td>\( 16 \)</td>
-                                <td>\( 10{,}461{,}394{,}944{,}000 \)</td>
-                                <td>\( 0.000000028676863994324312 \)</td>
-                            </tr>
-                            <tr>
-                                <td>\( 25 \)</td>
-                                <td>\( 7{,}755{,}605{,}021{,}665{,}493{,}000{,}000{,}000 \)</td>
-                                <td>\( 0.00000000000000000003868170170630684 \)</td>
-                            </tr>
-                        <table>
-                        <br>
-                        <p>
-                            From this chart, we can see that the boards of sizes 4 and 9 will always be solved, but a solution should almost never be found for the boards of sizes 16 and 25.
-                            However, as one can gleam from playing around with boards of size 16, A* with the Manhattan heuristic can solve boards of size 16 with surprising frequency, a
-                            testament to its intelligence in deciding in which order to check states!
-                        </p>
-                        <h4>Acknowledgments</h4>
-                        <ul>
-                            <li>Brian Scassellati's CPSC 475 (Spring 2021)</li>
-                            <li>Russell, Stuart J., and Peter Norvig. Artificial Intelligence: A Modern Approach. Pearson, 2020. </li>
-                        </ul>
-                    </div>
+                    <h1>About</h1>
+                    <hr>
+                    <h4>Introduction</h4>
+                    <p class="to_be_continued">
+                        The 8-puzzle, 15-puzzle, and other variations of sliding tile puzzles are classic examples of problems that can be solved using search techniques, even
+                        being mentioned in AIMA's section on standardized problems for search techniques. 
+                    </p>
+                    <p>
+                        This demo is intended to be a tool to illustrate the differences in performance of various search algorithms. The board itself can be controlled either by clicking the tile you want to move the empty square,
+                        or by pushing the arrow/WASD key corresponding to the direction of how you want to move the (unique) piece available to be moved in that direction, if one exists.
+                    </p>
+                    <h4>Search Methods</h4>
+                    <p> 
+                        This demonstration includes two non-heuristic methods (breadth-first and depth-first search), along with
+                        two heuristic search methods (greedy breadth-first and A* search), with two heuristics for each. 
+                        It also keeps track of how many search nodes the algorithm needed to expand before finding its solution.
+                        Thus, by applying different search methods to the same starting state, one can get an informal sense of
+                        how effective these search variations are.
+                    </p>
+                    <h4>Heuristics</h4>
+                    <p>
+                        The two heuristics included are the number-of-misplaced-tiles and and the Manhattan-distance heuristics.
+                        In this application of heuristic search, these heuristics guess how many more moves might be required in the solution. 
+                        The number-of-misplaced-tiles heuristic, as implied by the name, assigns to each state in consideration the number of tiles out of place.
+                        The Manhattan-distance heuristic assigns to each state the sum of the Manhattan distances of each tile from its correct location.
+                        I claim (but you can use the demo above to convince yourself!) that the Manhattan distance heuristic tends to find a solution faster
+                        than number-of-misplaced-tiles, since, for admissible heuristics (more on that in the next paragraph), a heuristic that on average
+                        assigns larger values to states than another heuristic tends to find an optimal solution after expanding fewer nodes.
+                        It is clear that the value assigned to a state by the Manhattan distance is always at least that assigned by the
+                        number-of-misplaced-tiles heuristics.
+                    </p>
+                    <h4>Comparison of Outputs</h4>
+                    <p> 
+                        Note that these search algorithms will not all find the same solutions.
+                        In particular, depth-first search and greedy BFS, are both non-optimal in that they are not guaranteed to
+                        return the best solution (i.e, the one requiring the fewest moves). One can observe through experimentation that
+                        DFS, in particular, can often result in solutions that are orders of magnitude larger in length than that of the optimal solution.
+                        A* is optimal so long as the heuristic is admissible, which means that the true number of
+                        moves away from the optimal solution from that state is never more than the guess made by our heuristic.
+                        Our two heuristics are admissible because they both solved relaxed versions of the sliding tile problem.
+                        To be precise, the number of misplaced tiles is equivalent to the path cost of a version of the problem in which any
+                        tile can be put in its correct place in one move; the Manhattan distance heuristic is equivalent to the path cost of a version of the problem
+                        in which tiles can overlap (i.e, multiple tiles can be placed in one location).
+                    </p>
+                    <h4>Technical Limitations</h4>
+                    <p>
+                        Because sets in JS compare objects by reference and not element-wise equality, for the search algorithm to remember which states have been visited,
+                        each state that is explored has to be converted to a string. This significantly slows down execution.
+                        Due to this slowness, a search will automatically stop if 300,000 nodes have been expanded without finding a solution (as
+                        this is roughly after how much time I lose patience waiting for a solution).
+                        Given this cap, how likely is it that a solution is found? We can get a sense of it by considering the ratio of the maximum number of search nodes
+                        we allow ourselves to visit to the total number of unique states in the search space, as in the following chart:
+                    </p>
+                    <table id="search_size_table">
+                        <tr>
+                            <th>Board size</th>
+                            <th>Size of search space</th>
+                            <th>Ratio of max nodes to the size of the search space</th>
+                        </tr>
+                        <tr>
+                            <td>\( n \) <br> <span class="smaller_text">\( (n\geq 4, \sqrt{n} \in \mathbb{N})\)</span></td>
+                            <td>\( \frac{n!}{2} \)</td>
+                            <td>\( \frac{300{,}000}{\frac{n!}{2}} \)</td>
+                        </tr>
+                        <tr>
+                            <td>\( 4 \)</td>
+                            <td>\( 12 \)</td>
+                            <td>\( &gt;1 \)</td>
+                        </tr>
+                        <tr>
+                            <td>\( 9 \)</td>
+                            <td>\( 181{,}440 \)</td>
+                            <td>\( &gt;1 \)</td>
+                        </tr>
+                        <tr>
+                            <td>\( 16 \)</td>
+                            <td>\( 10{,}461{,}394{,}944{,}000 \)</td>
+                            <td>\( 0.000000028676863994324312 \)</td>
+                        </tr>
+                        <tr>
+                            <td>\( 25 \)</td>
+                            <td>\( 7{,}755{,}605{,}021{,}665{,}493{,}000{,}000{,}000 \)</td>
+                            <td>\( 0.00000000000000000003868170170630684 \)</td>
+                        </tr>
+                    <table>
+                    <br>
+                    <p>
+                        From this chart, we can see that the boards of sizes 4 and 9 will always be solved, but a solution should almost never be found for the boards of sizes 16 and 25.
+                        However, as one can gleam from playing around with boards of size 16, A* with the Manhattan heuristic can solve boards of size 16 with surprising frequency, a
+                        testament to its intelligence in deciding in which order to check states!
+                    </p>
+                    <h4>Acknowledgments</h4>
+                    <ul>
+                        <li>Brian Scassellati's CPSC 475 (Spring 2021)</li>
+                        <li>Russell, Stuart J., and Peter Norvig. Artificial Intelligence: A Modern Approach. Pearson, 2020. </li>
+                    </ul>
                 </div>
             </div>
 
