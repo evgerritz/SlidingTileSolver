@@ -92,7 +92,7 @@ class Board {
 
     // returns the tile at the given location, where location is a list of (row, col)
     get_tile_from_location(location) {
-        if (is_valid_location(location)) {
+        if (this.is_valid_location(location)) {
             return this.state.get([location[0], location[1]]);
         }
     }
